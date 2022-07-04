@@ -38,7 +38,7 @@ function ProfileContainer() {
                     <div className="profile-section-list">
                         {
                             assessments ? assessments.map((assessment, i) => {
-                                if(assessment.status === "finished") return (<Link className="profile-assessment" to='/'><div>{assessment.assessmentName}</div></Link>);
+                                if(assessment.status === "finished") return (<Link className="profile-assessment" to='/history'><div>{assessment.assessmentName}</div></Link>);
                             }) : <>There's nothing here</>
                         }
                     </div>

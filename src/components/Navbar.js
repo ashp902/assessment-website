@@ -11,7 +11,7 @@ function Navbar() {
             Home
           </h4>
         </Link>
-        <Link className='nav-item' to='/examScreen'>
+        <Link className='nav-item' to='/create'>
           <h4>
             Exam
           </h4>
