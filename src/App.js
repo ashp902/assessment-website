@@ -6,6 +6,7 @@ import ExamScreen from './components/pages/ExamScreen';
 import LandingPage from './components/pages/LandingPage';
 import StudentProfile from './components/pages/StudentProfile';
 import Create from './components/pages/Create';
+import History from './components/pages/History';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='/studentProfile' element={<StudentProfile />} ></Route>
           <Route path='/examScreen' element={<ExamScreen />} ></Route>
           <Route path='/create' element={<Create />}></Route>
+          <Route path='/history' element={<History />}></Route>
         </Routes>
       </BrowserRouter>
     </>

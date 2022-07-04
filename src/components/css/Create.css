@@ -2,8 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 80%;
-    height: 94%;
-    overflow-y: auto;
+    height: 20%;
     padding: 0 10% 0 10%;
 }
 
@@ -13,25 +12,31 @@
 
 .create-title {
     margin: 0;
-    padding: 2% 0 2% 0;
+    height: 12%;
+    font-weight: 700;
+    padding: 0 10% 0 10%;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
 }
 
-.create-container hr {
-    width: 100%;
+hr {
+
     margin: 0;
     background-color: #BBBBBB;
 }
 
 .create-buttons {
     width: 80%;
-    height: 6%;
-    padding: 1% 10% 1% 10%;
+    height: 10%;
+    padding: 0 10% 0 10%;
     display: flex;
+    align-items: center;
 }
 
 .create-button {
     width: fit-content;
-    height: 100%;
+    height: 60%;
     padding: 0 4% 0 4%;
     background-color: rgb(84,16,16);
     border-radius: 5px;
@@ -50,7 +55,7 @@
 .create-submit-button {
     display: flex;
     width: fit-content;
-    height: 100%;
+    height: 60%;
     padding: 0 4% 0 4%;
     border-radius: 5px;
     background-color: rgb(0, 70, 0);
@@ -64,7 +69,9 @@
 .create-questions {
     width: 80%;
     padding: 0 10% 0 10%;
-    min-height: 500px;
+    overflow-y: auto;
+    flex-grow: 1;
+    height: 74%;
 }
 
 .create-question-form {
@@ -74,12 +81,14 @@
     display: flex;
     flex-direction: column;
     margin: 1% 0 1% 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .create-create-question {
+    height: 50px;
     width: 90%;
     padding: 0 5% 0 5%;
-    height: 50px;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -136,6 +145,18 @@
     color: #EEEEEE;
     font-size: 1em;
     letter-spacing: 0.05em;
+}
+
+.create-textarea-name {
+    border-radius: 5px;
+    padding: 1% 1% 1% 1%;
+    background-color: #666666;
+    outline: none;
+    resize: none;
+    color: #EEEEEE;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    height: 15px;
 }
 
 .create-save-button {

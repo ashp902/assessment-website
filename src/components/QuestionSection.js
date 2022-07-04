@@ -7,14 +7,9 @@ function QuestionSection({title, content}) {
             <h1 className='section-title'>{title}</h1>
             <hr className='section-break'/>
             <p className='section-content'>
-                {content.split("\n").map(function(item) {
-                    return (
-                        <>
-                            {item}
-                            <br />
-                        </>
-                    )
-                })}
+                {
+                    content.replace('\\n', '<br/>')
+                }
             </p>
         </div>
     );

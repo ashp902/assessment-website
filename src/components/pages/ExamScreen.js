@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import Axios from 'axios';
 
 import Editor from "../Editor";
 import QuestionSection from "../QuestionSection";
@@ -6,85 +8,13 @@ import IOSection from "../IOSection";
 import "../../App.css";
 import "../css/ExamScreen.css";
 
-var questions = [
-    {
-        title: "Solve Me First 1",
-        statement: "Complete the function solveMeFirst to compute the sum of two integers.",
-        example: "a = 7\n b = 3\n Return 10",
-        functionDescription: "Complete the solveMeFirst function in the editor below.\nsolveMeFirst has the following parameters:\nint a: the first value \nint b: the second value \nReturns - int: the sum of a and b",
-        constraints: "1 <= a, b <= 1000",
-        input: "a = 2\nb = 3",
-        output: "5",
-        explanation: "2 + 3 = 5",
-        code: "print('Hello World')",
-        testCases: [
-            {
-                input: "3\n7",
-                output: "10\n10"
-            },
-            {
-                input: "4\n6",
-                output: "10\n10"
-            },
-            {
-                input: "11\n6",
-                output: "17\n16"
-            }
-        ]
-    },
-    {
-        title: "Solve Me First 2",
-        statement: "Complete the function solveMeFirst to compute the sum of two integers.",
-        example: "a = 7\n b = 3\n Return 10",
-        functionDescription: "Complete the solveMeFirst function in the editor below.\nsolveMeFirst has the following parameters:\nint a: the first value \nint b: the second value \nReturns - int: the sum of a and b",
-        constraints: "1 <= a, b <= 1000",
-        input: "a = 2\nb = 3",
-        output: "5",
-        explanation: "2 + 3 = 5",
-        code: "print('Hello World')",
-        testCases: [
-            {
-                input: "3\n7",
-                output: "10\n10"
-            },
-            {
-                input: "4\n6",
-                output: "10\n10"
-            },
-            {
-                input: "11\n6",
-                output: "17\n17"
-            }
-        ]
-    },
-    {
-        title: "Solve Me First 3",
-        statement: "Complete the function solveMeFirst to compute the sum of two integers.",
-        example: "a = 7\n b = 3\n Return 10",
-        functionDescription: "Complete the solveMeFirst function in the editor below.\nsolveMeFirst has the following parameters:\nint a: the first value \nint b: the second value \nReturns - int: the sum of a and b",
-        constraints: "1 <= a, b <= 1000",
-        input: "a = 2\nb = 3",
-        output: "5",
-        explanation: "2 + 3 = 5",
-        code: "print('Hello World')",
-        testCases: [
-            {
-                input: "3\n7",
-                output: "10\n10"
-            },
-            {
-                input: "4\n6",
-                output: "10\n10"
-            },
-            {
-                input: "11\n6",
-                output: "17\n17"
-            }
-        ]
-    }
-]
-
 function ExamScreen() {
+
+    var userId = "";
+
+    const location = useLocation();
+    var questions = [...location.state.questions];
+    //console.log(questions);
 
     const [results, setResults] = useState([])
     const [active, setActive] = useState(0)
@@ -92,10 +22,10 @@ function ExamScreen() {
 
     const SubmitCode = async (e) => {
         questions[active].code = value;
-        //console.log(questions);
+        console.log(questions);
 
         var res = [];
-        for(var i = 0; i < questions[active].testCases.length; i++) {
+        for(var i = 0; i < questions[active].testcases.length; i++) {
             const postOptions = {
                 method: 'POST',
                 headers: {
@@ -104,7 +34,7 @@ function ExamScreen() {
                     'X-RapidAPI-Key': 'e888419973msh656e6c519ba40e6p184a27jsnbe37fdf04f60',
                     'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
                 },
-                body: JSON.stringify({"language_id":71,"source_code":value,"stdin":questions[active].testCases[i].input})
+                body: JSON.stringify({"language_id":71,"source_code":value,"stdin":questions[active].testcases[i].input})
             };
             
             const response = await fetch('https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&fields=*', postOptions)        
@@ -125,18 +55,20 @@ function ExamScreen() {
                             'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
                         },
                     });
-                    //console.log(getSolution);
+                    console.log(getSolution);
                     jsonGetSolution = await getSolution.json();
                 }
             }
             if (jsonGetSolution.stdout) {
                 const output = jsonGetSolution.stdout.split('\n');
-                //console.log(output)
-                //console.log((questions[0].testCases[i].output + '\n').split('\n'))
-                if(JSON.stringify((questions[0].testCases[i].output + '\n').split('\n')) === JSON.stringify(output)) {
+                console.log(output)
+                console.log((questions[0].testcases[i].output + '\n').split('\n'))
+                if(JSON.stringify((questions[0].testcases[i].output + '\n').split('\n')) === JSON.stringify(output)) {
                     res.push('success')
+                    console.log('success');
                 } else {
                     res.push('failed')
+                    console.log('failed')
                 }
             } else if (jsonGetSolution.stderr) {
                 const error = jsonGetSolution.stderr;
@@ -146,8 +78,31 @@ function ExamScreen() {
                 console.log(compilation_error)
             }
         }
-        setResults(res)
-        //console.log(results);
+        setResults([...results, ...res])
+    }
+
+    function SubmitResults() {
+        questions[active].results = results;
+        console.log(questions);
+    }
+
+    function submitTest() {
+        var passed = 0
+        var total = 0
+        for(var i = 0; i < questions.length; i++) {
+            total += questions[i].results.length
+            for(var j = 0; j < questions[i].results.length; j++) {
+                if(questions[i].results[j] === "passed") passed += 1
+            }
+        }
+        var percentage = passed / total * 100
+        console.log(percentage)
+        console.log(location.state.id)
+        Axios.post('http://localhost:3001/updateAssessment', {
+            id: location.state.id,
+            userId: userId,
+            result: percentage,
+        })
     }
 
     return (
@@ -163,13 +118,15 @@ function ExamScreen() {
                         
                     })
                 }
+                <div className='exam-nav-filler'></div>
+                <div className='exam-nav-submit' onClick={submitTest}>Submit Test</div>
             </div>
             <div className="container">
                 
                 <div className="left-container">
                     <QuestionSection title={questions[active].title} content={questions[active].statement} />
                     <QuestionSection title='Example' content={questions[active].example} />
-                    <QuestionSection title='Function Description' content={questions[active].functionDescription} />
+                    <QuestionSection title='Function Description' content={questions[active].description} />
                     <QuestionSection title='Constraints' content={questions[active].constraints} />
                     <IOSection input={questions[active].input} output={questions[active].output} explanation={questions[active].explanation} />
                 </div>
@@ -185,7 +142,7 @@ function ExamScreen() {
                         onChange={setValue}
                     />
                     <div className="buttons-container">
-                        <div className="submit-button">
+                        <div className="submit-button" onClick={SubmitResults}>
                             Submit
                         </div>
                         <div className="run-button" onClick={SubmitCode}>

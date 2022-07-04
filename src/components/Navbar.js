@@ -6,7 +6,7 @@ function Navbar() {
   return (
     <>
       <nav className='navbar'>
-        <Link className='nav-item' to='/home'>
+        <Link className='nav-item' to='/studentProfile'>
           <h4>
             Home
           </h4>
